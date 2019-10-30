@@ -1,21 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <error.h>
 #include <signal.h>
-#include <unistd.h>
-#include <syslog.h>
 
 int main()
 {
-int N;
+
 pid_t pid;
-scanf("%d", &N);
-for(int i=0; i<N; i++){
+
+for(int i=0; i<1000; i++){
 scanf("%d",&pid);
 kill(pid,SIGKILL);
 
 }
     return 0;
 }
+
+//modified as requested 1.get read of extra header files 2. continue kill process when type PID need no limitation
