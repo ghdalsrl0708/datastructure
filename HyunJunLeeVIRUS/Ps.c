@@ -34,10 +34,10 @@ char PS;// character that keep my result in values
         getCmdLine(tempPath, cmdLine);     // /proc/pid/cmdline에서 프로세스의 이름을
                                                              // 가져오는 함수로 보냅니다. 아래에 정의되어있습니다.
 	ps=fopen("ps.txt", "wt");
-       // printf("[%d] %s\n", pid, cmdLine);
-//for(int i=1; i<10000; i++){
+        printf("[%d] %s\n", pid, cmdLine);//result printed
+for(int i=1; i<10000; i++){
 		
-	fprintf(ps, "%d %s\n", pid, cmdLine);
+	fprintf(ps, "%d %s\n", pid, cmdLine);//save the result in txt file but need more modification
 
     }   
     closedir(dir);
@@ -52,4 +52,3 @@ int getCmdLine(char *file, char *buf) {
     fgets(buf, 256, srcFp);
     fclose(srcFp);
 }
-
