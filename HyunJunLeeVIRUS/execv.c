@@ -7,14 +7,15 @@
 int main(int argc, char const * argv[]) {
 pid_t pid = 0;
 int status = 0;
-char * args[] = {"ls", "-a", "-l", NULL};
+char * args[] = {"ps", "-a", "-l", NULL};
 pid = fork();
 switch (pid) {
 case -1:
 perror("fork() error!"); exit(-1);
 case 0:
-execv("/bin/ls", args); break;
+execv("/bin/ps", args); break;
 }
 if (pid > 0) { wait(&status); }
+//by using fopen, fprintf I'm trying to make result in txt file(list of ps -al)
 return 0;
 }
