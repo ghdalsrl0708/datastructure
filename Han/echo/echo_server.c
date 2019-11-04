@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #define BUFSIZE 1024
-#define PORT 9999
+#define PORT 8888
 
 void error_handling(char *message);
 
@@ -33,7 +33,7 @@ int main(void) {
     serv_addr.sin_port = htons(PORT);
 
     if (bind(serv_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
-        error_handling("intd() error");
+        error_handling("bind() error");
 
     if (listen(serv_sock, 5) == -1)
         error_handling("listen() error");
@@ -49,7 +49,11 @@ int main(void) {
     while (1) {
         str_len = read(clnt_sock, message, BUFSIZE - 1);
         message[str_len] = 0;
-        printf("%s", message);
+        if (strcmp(message, "help\n") == 0) {
+            printf("fuck that shit\n");
+        } else {
+            printf("%s", message);
+        }
     }
     close(clnt_sock);
     return 0;

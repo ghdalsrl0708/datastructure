@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #define BUFSIZE 1024
-#define PORT 9999
+#define PORT 8888
 
 void error_handling(char *message);
 
