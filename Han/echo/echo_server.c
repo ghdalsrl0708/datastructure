@@ -49,8 +49,10 @@ int main(void) {
     while (1) {
         str_len = read(clnt_sock, message, BUFSIZE - 1);
         message[str_len] = 0;
+        // first read message
+
         if (strcmp(message, "help\n") == 0) {
-            printf("fuck that shit\n");
+            printf("test code\n");
         } else {
             printf("%s", message);
         }

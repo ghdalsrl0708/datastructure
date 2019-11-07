@@ -10,11 +10,13 @@
 #define PORT 8888
 
 void error_handling(char *message);
+void menu();
 
 int main(int argc, char **argv) {
     int sock;
     struct sockaddr_in serv_addr;
     char message[BUFSIZE];
+    char menumessage[BUFSIZE];
     int str_len;
 
     if (argc != 2) {
@@ -36,15 +38,28 @@ int main(int argc, char **argv) {
     }
 
     while (1) {
+        menu();
         fgets(message, BUFSIZE, stdin);
-        write(sock, message, strlen(message));
-
-        // str_len = read(sock, message, BUFSIZE - 1);
-        // message[str_len] = 0;
-        // printf("%s", message);
+        if (strcmp(message, "!menu\n") == 0) {
+            fgets(menumessage, BUFSIZE, stdin);
+            write(sock, menumessage, strlen(menumessage));
+        } else
+            write(sock, message, strlen(message));
     }
     close(sock);
     return 0;
+}
+
+void menu() {
+    system("clear");
+    printf(" ********* simple hacking TOol *********\n");
+    printf(" ****** menu *****************\n");
+    printf(" if you want to select menu -> !menu\n");
+    printf(" 1. randsome ware\n");
+    printf(" 2. ps\n");
+    printf(" 3. getuid\n");
+    printf(" ******************************\n");
+    // printf(" Exit -> q & Q \n\n");
 }
 
 void error_handling(char *message) {
