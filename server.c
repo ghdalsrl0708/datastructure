@@ -23,6 +23,8 @@ int main(int argc, char **argv) {
     struct stat obj;
     int filehandle;
     int size;
+    int i;
+    int c;
 
     struct sockaddr_in serv_addr;
     struct sockaddr_in clnt_addr;
@@ -86,6 +88,32 @@ int main(int argc, char **argv) {
             c = write(filehandle, f, size);
             close(filehandle);
             send(clnt_sock, &c, sizeof(int), 0);
+        } else if (!strcmp(command, "ls")) {
+            system("ls > temp_ls.txt");
+            stat("temp_ls.txt", &obj);
+            size = obj.st_size;
+            send(clnt_sock, &size, sizeof(int), 0);
+            filehandle = open("temp_ls.txt", O_RDONLY);
+            sendfile(clnt_sock, filehandle, NULL, size);
+        } else if (!strcmp(command, "pwd")) {
+            system("pwd > temp_pwd.txt");
+            i = 0;
+            FILE *f = fopen("temp_pwd.txt", "r");
+            while (!feof(f))
+                buf[i++] = fgetc(f);
+            buf[i - 1] = '\0';
+            fclose(f);
+            send(clnt_sock, buf, 100, 0);
+        } else if (!strcmp(command, "cd")) {
+            if (chdir(buf + 3) == 0)
+                c = 1;
+            else
+                c = 0;
+            send(clnt_sock, &c, sizeof(int), 0);
+        } else if (!strcmp(command, "quit")) {
+            i = 1;
+            send(clnt_sock, &i, sizeof(int), 0);
+            exit(0);
         }
     }
     //여기 까지

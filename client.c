@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     //실제 실행 부분
     while (1) {
         printf("\033[1;33m ex command \n");
-        printf("\033[1;33m download, upload, pwd, ls, cd, quit\n");
+        printf("\033[1;33m download, upload, ls, pwd, cd, quit\n");
         printf("\033[1;32m HackToOl command line > ");
         fgets(menu, BUFSIZE, stdin); // command
         fprintf(stderr, "\033[97m"); // white
@@ -102,6 +102,43 @@ int main(int argc, char **argv) {
                 printf("업로드 완료\n");
             else
                 printf("업로드 실패\n");
+        } else if (!strcmp(menu, "ls\n")) { // ls
+            strcpy(buf, "ls");
+            send(sock, buf, 100, 0);
+            recv(sock, &size, sizeof(int), 0);
+            f = malloc(size);
+            recv(sock, f, size, 0);
+            filehandle = creat("temp.txt", O_WRONLY);
+            write(filehandle, f, size, 0);
+            close(filehandle);
+            printf("--THe ROmote DIrectory LIst--\n");
+            system("cat temp.txt");
+        } else if (!strcmp(menu, "pwd\n")) {
+            strcpy(buf, "pwd");
+            send(sock, buf, 100, 0);
+            recv(sock, buf, 100, 0);
+            printf("--THe path of the Remote Directory--\n%s", buf);
+        } else if (!strcmp(menu, "cd\n")) {
+            strcpy(buf, "cd ");
+            printf("이동할 경로 : ");
+            scanf("%s", buf + 3);
+            fgets(temp, BUFSIZE, stdin);
+            send(sock, buf, 100, 0);
+            recv(sock, &status, sizeof(int), 0);
+            if (status)
+                printf("경로 변경 완료\n");
+            else {
+                printf("경로 변경 실패\n");
+            }
+        } else if (!strcmp(menu, "quit\n")) {
+            strcpy(buf, "quit");
+            send(sock, buf, 100, 0);
+            recv(sock, &status, 100, 0);
+            if (status) {
+                printf("서버 닫는 중...");
+                exit(0);
+            }
+            printf("서버 닫기 실패\n");
         }
     }
     //여기까지
