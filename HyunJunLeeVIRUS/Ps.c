@@ -10,7 +10,7 @@ int main() {
     DIR *dir;                       //  /proc/pid/ 를 가리킬 DIR* 변수
     struct dirent *entry;        // 각 파일의 inode를 통해 파일을 선택할 dirent 구조체
     struct stat fileStat;          // 파일의 정보를 담는 구조체
-    FILE *ps=fopen("ps.txt", "wt");//using fopen to make ps.txt file;//ps is the file i would like to make
+FILE *ps=fopen("ps.txt", "wt");//using fopen to make ps.txt file;//ps is the file i would like to make
 
     int pid;                         // 프로세스는 /proc 디렉토리에 자신의 pid로 파일을 담아 둡니다.
     char cmdLine[256];
@@ -18,7 +18,7 @@ int main() {
 
     printf("Save processes info in ps.txt\n");
     printf("Check ps.txt by 'cat ps.txt'\n");
-    printf("PID, process Location\n");
+    printf("PID, process Rocation\n");
 
     dir = opendir("/proc");   //  /proc이란 디렉토리 스트름이 대한 포인터가 반환되었습니다.
 
@@ -34,12 +34,14 @@ int main() {
         sprintf(tempPath, "/proc/%d/cmdline", pid); // cmdline :: 프로세스 이름이 적힌파일
         getCmdLine(tempPath, cmdLine);     // /proc/pid/cmdline에서 프로세스의 이름을
                                                              // 가져오는 함수로 보냅니다. 아래에 정의되어있습니다.
+
+       
 	fprintf(ps,"%d %s\n",pid,cmdLine);
 
         
 }   
  closedir(dir);
- fclose(ps);
+fclose(ps);
 
 }
 int getCmdLine(char *file, char *buf) {	
