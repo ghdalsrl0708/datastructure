@@ -1,3 +1,6 @@
+-코드에 대한 간단 설명
+-What the code is about.
+
 1. Ps.c 파일은 컴퓨터 내 pid와 프로세스 위치를 알아내어 ps.txt파일에 저장하는 코드입니다.
 2. delprocess.c 파일은 pid 값을 입력하면 종료를 하는 코드입니다.
 3. execv.c 파일은 처음에 pid 값과 등등을 구할려고 한 Ps.c와 유사하지만 txt파일에 저장은 못합니다. 'ps-al' 의 결과 값을 볼수있습니다.
