@@ -1,3 +1,4 @@
+//pid를 입력 받는데로 계속 kill하는 프로그램입니다.
 #include <stdio.h>
 #include <signal.h>
 
