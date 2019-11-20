@@ -1,5 +1,5 @@
 -코드에 대한 간단 설명
--What the code is about.
+-Simple explanation about the code.
 
 1. Ps.c 파일은 컴퓨터 내 pid와 프로세스 위치를 알아내어 ps.txt파일에 저장하는 코드입니다.
 2. delprocess.c 파일은 pid 값을 입력하면 종료를 하는 코드입니다.
