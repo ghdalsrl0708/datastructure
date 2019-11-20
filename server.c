@@ -1,11 +1,11 @@
-#include <arpa/inet.h>
-//#include <fcntl.h>
+#include <fcntl.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/sendfile.h>
 #include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <sys/stat.h>
 
 #define BUFSIZE 1024
 #define PORT 9999
@@ -16,6 +16,13 @@ int main(int argc, char **argv) {
 
     int serv_sock;
     int clnt_sock;
+
+    char buf[100];
+    char command[10];
+    char filename[BUFSIZE];
+    struct stat obj;
+    int filehandle;
+    int size;
 
     struct sockaddr_in serv_addr;
     struct sockaddr_in clnt_addr;
@@ -47,6 +54,39 @@ int main(int argc, char **argv) {
 
     //실제 실행될 부분
     while (1) {
+        recv(clnt_sock, buf, 100, 0);
+        sscanf(buf, "%s", command);
+        if (!strcmp(command, "download")) {
+            sscanf(buf, "%s%s", filename, filename);
+            stat(filename, &obj);
+            filehandle = open(filename, O_RDONLY);
+            size = obj.st_size;
+            if (filehandle == -1) {
+                size = 0;
+            }
+            send(clnt_sock, &size, sizeof(int), 0);
+            if (size) {
+                sendfile(clnt_sock, filehandle, NULL, size);
+            }
+        } else if (!strcmp(command, "upload")) {
+            int c = 0, len;
+            char *f;
+            sscanf(buf + strlen(command), "%s", filename);
+            recv(clnt_sock, &size, sizeof(int), 0);
+
+            while (1) {
+                filehandle = open(filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
+                if (filehandle == -1) {
+                    sprintf(filename + strlen(filename), "_1");
+                } else
+                    break;
+            }
+            f = malloc(size);
+            recv(clnt_sock, f, size, 0);
+            c = write(filehandle, f, size);
+            close(filehandle);
+            send(clnt_sock, &c, sizeof(int), 0);
+        }
     }
     //여기 까지
     close(clnt_sock);
