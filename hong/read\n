@@ -1,0 +1,28 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> 
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+int main(void)
+{
+	int line_count =0;
+	char buffer[128];
+	FILE *p_file = NULL;
+	
+	p_file = fopen("Text.txt", "rt");
+	
+	if ( p_file != NULL){
+		printf("Text.txt 내용\n");
+		while (fgets(buffer,128, p_file) != NULL){
+			line_count++;
+			printf("[%d]번째 줄 : %s", line_count, buffer);
+		}
+		fclose(p_file);
+
+		printf("\n\n");
+	}
+	return 0; 
+}
